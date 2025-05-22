@@ -452,7 +452,7 @@ namespace GUI
             toolStripMenuItem2.ImageScaling = ToolStripItemImageScaling.None;
             toolStripMenuItem2.Name = "toolStripMenuItem2";
             toolStripMenuItem2.Size = new System.Drawing.Size(62, 20);
-            toolStripMenuItem2.Text = "Tools";
+            toolStripMenuItem2.Text = "Extensions";
             // 
             // mapTranslatorToolStripMenuItem
             // 
