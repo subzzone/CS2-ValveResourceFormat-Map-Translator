@@ -18,6 +18,7 @@ using GUI.Types.Renderer;
 using GUI.Utils;
 using SteamDatabase.ValvePak;
 using ValveResourceFormat.IO;
+using Vortice.SpirvCross;
 
 #nullable disable
 
@@ -929,6 +930,11 @@ namespace GUI
             Log.ClearConsole();
         }
 
+        //internal static readonly string[] itemsArray = new[] { "Map Translator", "JSON Exporter" };
+        internal static readonly string[] itemsArray = new[] { "JSON Exporter" };
+        internal static readonly string[] items = new[] { "Spanish", "English", "French", "German" };
+
+
         private void MainForm_Shown(object sender, EventArgs e)
         {
             if (!Settings.Config.Update.CheckAutomatically)
@@ -1013,6 +1019,139 @@ namespace GUI
                     form.ShowDialog(this);
                 }
             }).ConfigureAwait(false);
+        }
+
+        private void ExportMapTextToolStripButton_Click(object sender, EventArgs e)
+        {
+            // Prompt the user to select the folder containing the maps
+            using var folderDialog = new FolderBrowserDialog
+            {
+                Description = "Select the folder containing the maps",
+                UseDescriptionForTitle = true,
+                ShowNewFolderButton = true
+            };
+
+            if (folderDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Create a dialog for selecting language and export type
+            using var optionsForm = new Form
+            {
+                Text = "Export Options",
+                Width = 300,
+                Height = 230,
+                StartPosition = FormStartPosition.CenterParent,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false
+            };
+
+            var languageLabel = new Label
+            {
+                Text = "Select language (Not Working):",
+                Left = 20,
+                Top = 20,
+                Width = 240
+            };
+
+            var languageComboBox = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Left = 20,
+                Top = 40,
+                Width = 240
+            };
+            languageComboBox.Items.AddRange(items);
+            languageComboBox.SelectedIndex = 0;
+
+            var typeLabel = new Label
+            {
+                Text = "Select export type:",
+                Left = 20,
+                Top = 80,
+                Width = 240
+            };
+
+            var typeComboBox = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Left = 20,
+                Top = 100,
+                Width = 240
+            };
+            typeComboBox.Items.AddRange(itemsArray);
+            typeComboBox.SelectedIndex = 0;
+
+            var okButton = new Button
+            {
+                Text = "OK",
+                DialogResult = DialogResult.OK,
+                Left = 100,
+                Top = 150,
+                Width = 80
+            };
+
+            optionsForm.Controls.Add(languageLabel);
+            optionsForm.Controls.Add(languageComboBox);
+            optionsForm.Controls.Add(typeLabel);
+            optionsForm.Controls.Add(typeComboBox);
+            optionsForm.Controls.Add(okButton);
+            optionsForm.AcceptButton = okButton;
+
+            if (optionsForm.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Extract user selections
+            var selectedFolderPath = folderDialog.SelectedPath;
+            var selectedLanguage = languageComboBox.SelectedItem?.ToString();
+            var selectedExportType = typeComboBox.SelectedItem?.ToString();
+
+            // Ejecutar acción según tipo de exportación
+            if (selectedExportType == "JSON Exporter")
+            {
+                var vpkFiles = Directory
+                    .GetFiles(selectedFolderPath, "*.vpk")
+                    .Where(f =>
+                    {
+                        var name = Path.GetFileName(f);
+                        return name.EndsWith("_dir.vpk", StringComparison.OrdinalIgnoreCase)
+                            || !name.Contains('_');
+                    })
+                    .ToArray();
+
+                using var progressForm = new ExtractProgressForm(null, selectedFolderPath, decompile: false)
+                {
+                    ShownCallback = (form, token) =>
+                    {
+                        Task.Run(() =>
+                        {
+                            form.SetProgress($"Starting export of {vpkFiles.Length} map(s)...");
+
+                            for (int i = 0; i < vpkFiles.Length; i++)
+                            {
+                                if (token.IsCancellationRequested) break;
+
+                                string vpkPath = vpkFiles[i];
+                                string mapName = Path.GetFileName(vpkPath);
+
+                                form.SetProgress($"[{i + 1}/{vpkFiles.Length}] Exporting: {mapName}");
+
+                                MapTranslator.ExportSingleMap(vpkPath, selectedFolderPath, selectedLanguage, form.SetProgress);
+                            }
+
+                            form.SetProgress("Export finished.");
+                        }, token);
+                    }
+                };
+
+                progressForm.ShowDialog();
+            }
+
+
         }
     }
 }

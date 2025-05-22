@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace GUI
 {
@@ -45,6 +46,8 @@ namespace GUI
             toolStripSeparator2 = new ToolStripSeparator();
             registerVpkFileAssociationToolStripMenuItem = new ToolStripMenuItem();
             createVpkFromFolderToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator4 = new ToolStripSeparator();
+            openWelcomeScreenToolStripMenuItem = new ToolStripMenuItem();
             explorerToolStripMenuItem = new ToolStripMenuItem();
             findToolStripButton = new ToolStripMenuItem();
             settingsToolStripMenuItem = new ToolStripMenuItem();
@@ -52,6 +55,7 @@ namespace GUI
             versionLabel = new ToolStripMenuItem();
             newVersionAvailableToolStripMenuItem = new ToolStripMenuItem();
             checkForUpdatesToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripMenuItem();
             recoverDeletedToolStripMenuItem = new ToolStripMenuItem();
             mainTabs = new ThemedTabControl();
             tabContextMenuStrip = new ContextMenuStrip(components);
@@ -79,8 +83,8 @@ namespace GUI
             vpkEditRemoveThisFolderToolStripMenuItem = new ToolStripMenuItem();
             vpkEditRemoveThisFileToolStripMenuItem = new ToolStripMenuItem();
             vpkEditSaveToDiskToolStripMenuItem = new ToolStripMenuItem();
-            toolStripSeparator4 = new ToolStripSeparator();
-            openWelcomeScreenToolStripMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem2 = new ToolStripMenuItem();
+            mapTranslatorToolStripMenuItem = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             tabContextMenuStrip.SuspendLayout();
             vpkContextMenu.SuspendLayout();
@@ -91,7 +95,7 @@ namespace GUI
             // 
             menuStrip.BackColor = System.Drawing.SystemColors.Window;
             menuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
-            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, explorerToolStripMenuItem, findToolStripButton, settingsToolStripMenuItem, aboutToolStripMenuItem, versionLabel, newVersionAvailableToolStripMenuItem, checkForUpdatesToolStripMenuItem });
+            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, explorerToolStripMenuItem, findToolStripButton, settingsToolStripMenuItem, aboutToolStripMenuItem, versionLabel, newVersionAvailableToolStripMenuItem, checkForUpdatesToolStripMenuItem, toolStripMenuItem1, toolStripMenuItem2 });
             menuStrip.Location = new System.Drawing.Point(0, 0);
             menuStrip.Name = "menuStrip";
             menuStrip.RenderMode = ToolStripRenderMode.System;
@@ -140,6 +144,18 @@ namespace GUI
             createVpkFromFolderToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             createVpkFromFolderToolStripMenuItem.Text = "Create VPK from folder";
             createVpkFromFolderToolStripMenuItem.Click += CreateVpkFromFolderToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new System.Drawing.Size(200, 6);
+            // 
+            // openWelcomeScreenToolStripMenuItem
+            // 
+            openWelcomeScreenToolStripMenuItem.Name = "openWelcomeScreenToolStripMenuItem";
+            openWelcomeScreenToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            openWelcomeScreenToolStripMenuItem.Text = "Open welcome screen";
+            openWelcomeScreenToolStripMenuItem.Click += OnOpenWelcomeScreenToolStripMenuItem_Click;
             // 
             // explorerToolStripMenuItem
             // 
@@ -206,6 +222,11 @@ namespace GUI
             checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
             checkForUpdatesToolStripMenuItem.Text = "Check for updates";
             checkForUpdatesToolStripMenuItem.Click += CheckForUpdatesToolStripMenuItem_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new System.Drawing.Size(12, 20);
             // 
             // recoverDeletedToolStripMenuItem
             // 
@@ -424,17 +445,26 @@ namespace GUI
             vpkEditSaveToDiskToolStripMenuItem.Text = "&Save VPK to disk";
             vpkEditSaveToDiskToolStripMenuItem.Click += OnSaveVPKToDiskToolStripMenuItem_Click;
             // 
-            // toolStripSeparator4
+            // toolStripMenuItem2
             // 
-            toolStripSeparator4.Name = "toolStripSeparator4";
-            toolStripSeparator4.Size = new System.Drawing.Size(200, 6);
+            toolStripMenuItem2.DropDownItems.AddRange(new ToolStripItem[] { mapTranslatorToolStripMenuItem });
+            toolStripMenuItem2.Image = (System.Drawing.Image)resources.GetObject("toolStripMenuItem2.Image");
+            toolStripMenuItem2.ImageScaling = ToolStripItemImageScaling.None;
+            toolStripMenuItem2.Name = "toolStripMenuItem2";
+            toolStripMenuItem2.Size = new System.Drawing.Size(62, 20);
+            toolStripMenuItem2.Text = "Tools";
             // 
-            // openWelcomeScreenToolStripMenuItem
+            // mapTranslatorToolStripMenuItem
             // 
-            openWelcomeScreenToolStripMenuItem.Name = "openWelcomeScreenToolStripMenuItem";
-            openWelcomeScreenToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            openWelcomeScreenToolStripMenuItem.Text = "Open welcome screen";
-            openWelcomeScreenToolStripMenuItem.Click += OnOpenWelcomeScreenToolStripMenuItem_Click;
+            mapTranslatorToolStripMenuItem.Image = (System.Drawing.Image)resources.GetObject("mapTranslatorToolStripMenuItem.Image");
+            mapTranslatorToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
+            mapTranslatorToolStripMenuItem.Name = "mapTranslatorToolStripMenuItem";
+            mapTranslatorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            mapTranslatorToolStripMenuItem.Text = "Map Translator";
+            mapTranslatorToolStripMenuItem.Click += ExportMapTextToolStripButton_Click;
+
+
+            
             // 
             // MainForm
             // 
@@ -468,7 +498,6 @@ namespace GUI
         #endregion
 
         private MenuStrip menuStrip;
-        private TabControl mainTabs;
         private ContextMenuStrip tabContextMenuStrip;
         private ToolStripMenuItem closeToolStripMenuItem;
         private ContextMenuStrip vpkContextMenu;
@@ -509,6 +538,10 @@ namespace GUI
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem openWelcomeScreenToolStripMenuItem;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ThemedTabControl mainTabs;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem mapTranslatorToolStripMenuItem;
     }
 }
 
