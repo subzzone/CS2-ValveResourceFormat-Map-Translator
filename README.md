@@ -54,6 +54,10 @@ If you are interested in helping, take a look at the open issues and join our Di
 
 Not all formats are 100% supported, some parameters are still unknown and not fully understood.
 
+## Extensions
+- **Map Translator** tool allows automatic export of all text from `.vpk` maps into **JSON** format, specifically designed to simplify usage with the **[StripperCS2](https://github.com/Source2ZE/StripperCS2)** plugin.
+
+
 ## Supported resource types
 Ext      | Name                    | Support
 -------- | ----------------------- | -------
