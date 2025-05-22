@@ -56,7 +56,16 @@ Not all formats are 100% supported, some parameters are still unknown and not fu
 
 ## Extensions
 - **Map Translator** tool allows automatic export of all text from `.vpk` maps into **JSON** format, specifically designed to simplify usage with the **[StripperCS2](https://github.com/Source2ZE/StripperCS2)** plugin.
+![image](https://github.com/user-attachments/assets/8987c00d-c99a-45dc-8c6a-b976d4a47680)
 
+    - **How to use it:**  
+      Simply select the folder containing all the maps you want to export.  
+      Then, start the export process — the tool will extract all in-map texts and save them to a new `json` folder **within the same directory**.
+    - 🔄 **Current state:**  
+      At the moment, only **text extraction** is available.    
+    - 🚧 **Planned features:**  
+      - 🌐 **Text translation** using the selected language via the **Google Translate API** *(coming soon)*  
+      - 🛠️ **Map modifier** that directly replaces in-map texts with translations *(planned – evaluating feasibility)*
 
 ## Supported resource types
 Ext      | Name                    | Support
